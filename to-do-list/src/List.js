@@ -1,11 +1,12 @@
 import "./List.css";
+import {Header} from './Header';
+import {Item} from './Item';
 
 const ToDoList = () => {
   return (
     <div className="to-do-list">
-      <header>To Do List</header>
-      <input id="input-item" type="text"></input>
-      <button onClick={e => addItem(e.view.document)}>Add To-Do</button>
+      <Header/>
+      <Item addItem={addItem}/>
       <div>
         <ul id="list"></ul>
       </div>
