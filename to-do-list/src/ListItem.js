@@ -1,5 +1,11 @@
-export const ListItem = ({items}) => {
+export const ListItem = (props) => {
     return (
-        <ul>{items.map((item, index) => <li key={index}>{item}</li>)}</ul>
-    )
+        <ul>
+            {props.items.map((item, index) => 
+            <li key={index}>
+                {item}
+                <button onClick={item => props.deleteItem(item)}>Delete</button>
+            </li>)}
+        </ul>
+    );
 }
