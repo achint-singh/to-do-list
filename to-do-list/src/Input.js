@@ -20,17 +20,10 @@ class Input extends React.Component {
     }
 
     deleteItem = (deletedItem) => {
-        console.log(deletedItem);
-        console.log('here');
-        let filteredItems = this.state.items.filter((item) => {
-            console.log(item[0] === deletedItem[0]);
-            return item !== deletedItem
-        });
-        console.log(filteredItems);
+        let filteredItems = this.state.items.filter((item) => item !== deletedItem);
         this.setState({
             items: [...filteredItems]
         });
-        console.log(this.state.items);
     }
 
     render() {

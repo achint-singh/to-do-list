@@ -1,10 +1,11 @@
 export const ListItem = (props) => {
+    let {items, deleteItem} = props;
     return (
         <ul>
-            {props.items.map((item, index) => 
+            {items.map((item, index) => 
             <li key={index}>
                 {item}
-                <button onClick={item => props.deleteItem(item)}>Delete</button>
+                <button onClick={() => deleteItem(item)}>Delete</button>
             </li>)}
         </ul>
     );
