@@ -1,43 +1,32 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { ListItem } from './ListItem';
 
-class Input extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {item: '', items: []};
-    }
+export const Input = () => {
+    const [item, setItem] = useState('');
+    const [items, setItems] = useState([]);
     
-    handleChange = (event) => {
-        this.setState({ item: event.target.value });
+    const handleChange = (event) => {
+        setItem(event.target.value)
     }
 
-    onSubmit = (event) => {
+    const onSubmit = (event) => {
         event.preventDefault();
-        this.setState({
-            item: '',
-            items: [...this.state.items, this.state.item]
-        });
+        setItem('');
+        setItems([...items, item]);
     }
 
-    deleteItem = (deletedItem) => {
-        let filteredItems = this.state.items.filter((item) => item !== deletedItem);
-        this.setState({
-            items: [...filteredItems]
-        });
+    const deleteItem = (deletedItem) => {
+        let filteredItems = items.filter((item) => item !== deletedItem);
+        setItems([...filteredItems]);
     }
 
-    render() {
-        return (
-            <div>
-                <form onSubmit={this.onSubmit}>
-                    <input id='input' value={this.state.item} type="text" onChange={this.handleChange} />
-                    <button>Submit</button>
-                </form>
-                <ListItem items={this.state.items} deleteItem={this.deleteItem}/>
-            </div>
-        )
-    }
-
+    return (
+        <div>
+            <form onSubmit={onSubmit}>
+                <input id='input' value={item} type="text" onChange={handleChange} />
+                <button>Submit</button>
+            </form>
+            <ListItem items={items} deleteItem={deleteItem}/>
+        </div>
+    )
 }
-
-export default Input;
