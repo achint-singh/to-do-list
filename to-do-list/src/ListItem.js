@@ -1,4 +1,3 @@
-// import React, {useState} from "react";
 import "./listItem.css";
 
 export const ListItem = (props) => {
