@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { ListItem } from './ListItem';
+import { ListItems } from './ListItems';
 import { ListControls } from './ListControls';
 
 export const Input = () => {
@@ -21,8 +21,7 @@ export const Input = () => {
         setInputItem(newItem);
     }
 
-    const onSubmit = (event) => {
-        event.preventDefault();
+    const onSubmit = () => {
         setAllItems([...items, inputItem]);
         setItems([...items, inputItem]);
         setInputItem({'name': '', 'completed': false, 'editing': false, 'uuid': -1});
@@ -173,11 +172,13 @@ export const Input = () => {
         <div>
             <ListControls deleteAllItems={deleteAllItems} showAllItems={showAllItems} showIncTasks={showIncTasks}
             showCompletedTasks={showCompletedTasks} deleteCompletedTasks={deleteCompletedTasks}/>
-            <form onSubmit={onSubmit}>
+            {/* <form onSubmit={onSubmit}>
                 <input id='input' value={inputItem.name} type="text" onChange={handleChange} />
                 <button>Submit</button>
-            </form>
-            <ListItem items={items} handleCheck={handleCheck} isChecked={isChecked} renderCheck={renderCheck}
+            </form> */}
+            <input id='input' value={inputItem.name} type="text" onChange={handleChange} />
+            <button onClick={onSubmit}>Submit</button>
+            <ListItems items={items} handleCheck={handleCheck} isChecked={isChecked} renderCheck={renderCheck}
             deleteItem={deleteItem} editItem={editItem} onSave={onSave} 
             handleEditedInput={handleEditedInput} cancelEdit={cancelEdit}/>
         </div>
