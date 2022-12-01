@@ -2,11 +2,12 @@ import React, {useState} from 'react';
 import {Header} from './Header';
 import { ListItems } from './ListItems';
 import { ListControls } from './ListControls';
+import { Input } from './Input';
 
 export const ToDoList = () => {
     const [inputItem, setInputItem] = useState({'name': '', 'completed': false, 'editing': false, 'uuid': -1});
+    const [filter, setFilter] = useState('all');
     const [items, setItems] = useState([]);
-    const [allItems, setAllItems] = useState([]);
     const [counter, setCounter] = useState(0);
     
     // functions to handle entering initial input
@@ -23,7 +24,6 @@ export const ToDoList = () => {
     }
 
     const onSubmit = () => {
-        setAllItems([...items, inputItem]);
         setItems([...items, inputItem]);
         setInputItem({'name': '', 'completed': false, 'editing': false, 'uuid': -1});
     }
@@ -38,15 +38,6 @@ export const ToDoList = () => {
             return i;
         });
 
-        const updatedAllItems = allItems.map(i => {
-            if (i.uuid === editingItem.uuid) {
-                return {...i, 'editing': true, 'prevItem': editingItem.name};
-            }
-
-            return i;
-        });
-
-        setAllItems([...updatedAllItems]);
         setItems(updatedItems);
     }
 
@@ -59,15 +50,6 @@ export const ToDoList = () => {
             return i;
         });
 
-        const updatedAllItems = allItems.map(i => {
-            if (i.uuid === item.uuid) {
-                return {...i, 'name': event.target.value};
-            }
-
-            return i;
-        });
-        
-        setAllItems([...updatedAllItems]);
         setItems([...updatedItems]);
     }
 
@@ -80,15 +62,6 @@ export const ToDoList = () => {
             return i;
         });
 
-        const updatedAllItems = allItems.map(i => {
-            if (i.uuid === item.uuid) {
-                return {...i, 'name': item.prevItem, 'editing': false, 'prevItem': null};
-            }
-
-            return i;
-        });
-
-        setAllItems([...updatedAllItems]);
         setItems([...updatedItems]);
     }
 
@@ -102,48 +75,33 @@ export const ToDoList = () => {
             return i;
         });
 
-        const updatedAllItems = allItems.map(i => {
-            if (i.uuid === item.uuid) {
-                return {...i, 'completed': false, 'editing': false};
-            }
-
-            return i;
-        });
-
-        setAllItems([...updatedAllItems]);
         setItems([...updatedItems]);
     }
 
     const deleteItem = (deletedItem) => {
         let filteredItems = items.filter((item) => item.uuid !== deletedItem.uuid);
-        let filteredAllItems = allItems.filter((item) => item.uuid !== deletedItem.uuid);
-        setAllItems([...filteredAllItems]);
         setItems([...filteredItems]);
     }
 
     // functions that handle editing the list entirely
     const deleteAllItems = () => {
-        setAllItems([]);
         setItems([]);
     }
 
     const showAllItems = () => {
-        setItems(allItems);
+        setFilter('all');
     }
 
     const showIncTasks = () => {
-        let incTasks = allItems.filter((item) => !item.completed);
-        setItems([...incTasks]);
+        setFilter('incomplete');
     }
 
     const showCompletedTasks = () => {
-        let completedTasks = allItems.filter((item) => item.completed);
-        setItems([...completedTasks]);
+        setFilter('complete');
     }
 
     const deleteCompletedTasks = () => {
-        let completedTasks = allItems.filter((item) => !item.completed);
-        setAllItems([...completedTasks]);
+        let completedTasks = items.filter((item) => !item.completed);
         setItems([...completedTasks]);
     }
 
@@ -157,7 +115,6 @@ export const ToDoList = () => {
             return i;
         });
 
-        setAllItems(updatedItems);
         setItems(updatedItems);
     }
 
@@ -169,6 +126,21 @@ export const ToDoList = () => {
         return item.completed ? true : false;
     }
 
+    let inputObject = {
+        id: 'input',
+        value: inputItem.name,
+        type: 'text',
+        onChange: handleChange,
+        ariaLabel: 'Enter to-do item.',
+
+    };
+
+    let buttonObject = [{
+        onClick: onSubmit,
+        label: 'Submit'
+    }]
+
+
     return (
         <div className="to-do-list">
             <Header heading="To Do List"/>
@@ -176,12 +148,14 @@ export const ToDoList = () => {
             <ListControls deleteAllItems={deleteAllItems} showAllItems={showAllItems} showIncTasks={showIncTasks}
             showCompletedTasks={showCompletedTasks} deleteCompletedTasks={deleteCompletedTasks}/>
 
-            <input id='input' value={inputItem.name} type="text" onChange={handleChange} />
-            <button onClick={onSubmit}>Submit</button>
+            {/* <input id='input' value={inputItem.name} type="text" onChange={handleChange} />
+            <button onClick={onSubmit}>Submit</button> */}
+
+            <Input input={inputObject} buttons={buttonObject}/>
 
             <ListItems items={items} handleCheck={handleCheck} isChecked={isChecked} renderCheck={renderCheck}
             deleteItem={deleteItem} editItem={editItem} onSave={onSave} 
-            handleEditedInput={handleEditedInput} cancelEdit={cancelEdit}/>
+            handleEditedInput={handleEditedInput} cancelEdit={cancelEdit} filter={filter}/>
         </div>
     )
 }
